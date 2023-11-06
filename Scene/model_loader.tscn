@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://drth28nfjwr4h"]
+
+[ext_resource type="Script" path="res://Scripts/model_loader.gd" id="1_ql5rt"]
+
+[node name="ModelLoader" type="Node3D"]
+script = ExtResource("1_ql5rt")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, -1.29053e-08, 0.989044, 0.14762, 8.6465e-08, 0.14762, -0.989044, 0, 1, -1.283)
+
+[node name="LicenseRequest" type="HTTPRequest" parent="."]
+
+[node name="ModelRequest" type="HTTPRequest" parent="."]
+
+[connection signal="request_completed" from="LicenseRequest" to="." method="_on_license_request_request_completed"]
+[connection signal="request_completed" from="ModelRequest" to="." method="_on_model_request_request_completed"]

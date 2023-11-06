@@ -1,0 +1,2 @@
+# VRoidHubWebAPIforGodot
+ GodotEngineでVRoidHubWebAPIを使ったサンプル
