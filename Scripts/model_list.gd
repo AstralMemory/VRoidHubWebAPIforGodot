@@ -79,11 +79,11 @@ func _on_image_request_request_completed(result, response_code, headers, body):
 			btn.size = base_button.size
 			var id = character_id[current_request_index]
 			var spec = character_spec[current_request_index]
-			btn.set_meta("character_id", id)
-			btn.set_meta("character_spec", spec)
-			btn.name = "button" + str(current_request_index)
-			add_child(btn)
-			base_button = btn
+			if spec != "1.0":
+				btn.set_meta("character_id", id)
+				btn.name = "button" + str(current_request_index)
+				add_child(btn)
+				base_button = btn
 		current_request_index += 1
 		_request_next_image()
 	else:
@@ -92,5 +92,4 @@ func _on_image_request_request_completed(result, response_code, headers, body):
 func _on_btn_pressed(pressed_button):
 	var btn = get_node("/root/ModelList/" + pressed_button)
 	Config.character_id = btn.get_meta("character_id")
-	Config.character_spec = btn.get_meta("character_spec")
 	get_tree().change_scene_to_file("res://Scene/model_loader.tscn")

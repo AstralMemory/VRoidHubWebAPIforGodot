@@ -11,8 +11,16 @@ const GRANT_TYPE = "authorization_code"
 var auth: bool = false
 
 func _ready():
+	if OS.get_name() == "ANDROID":
+		OS.request_permissions()
+		$AuthPanel/Paste.visible = true
 	if FileAccess.file_exists("user://model.vrm"):
 		DirAccess.remove_absolute("user://model.vrm")
+
+func _process(delta):
+	var viewport_size = get_viewport_rect().size
+	$SignIn.global_position =  viewport_size / 2 - $SignIn.size / 1
+	$AuthPanel.global_position = viewport_size / 2 - $AuthPanel.size / 2
 
 func _request_access_token(auth_code):
 	var post_data = "client_id=" + CLIENT_ID + "&"
@@ -35,7 +43,6 @@ func _on_auth_button_pressed():
 	var auth_code = $AuthPanel/InputCode.text
 	_request_access_token(auth_code)
 	
-	
 func _on_http_request_request_completed(result, response_code, headers, body):
 	var json = JSON.new()
 	if response_code == 200:
@@ -56,3 +63,10 @@ func _on_http_request_request_completed(result, response_code, headers, body):
 func _on_accept_dialog_confirmed():
 	if auth:
 		get_tree().change_scene_to_file("res://Scene/model_list.tscn")
+
+
+func _on_paste_pressed():
+	var clipboard_plugin = Engine.get_singleton("ClipBoardPlugin")
+	var text = clipboard_plugin.getClipboardText()
+	if text != null:
+		$AuthPanel/InputCode.text = text

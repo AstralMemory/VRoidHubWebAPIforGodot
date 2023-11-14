@@ -1,6 +1,6 @@
 res://Scene/model_loader.tscn
 res://Scripts/model_loader.gd
-res://Scene/o_auth.tscn
-res://Scripts/o_auth.gd
+res://Scene/model_list.tscn
 res://Scripts/model_list.gd
 res://Config.gd
+res://Scene/o_auth.tscn

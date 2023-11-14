@@ -2,6 +2,11 @@ extends Node3D
 
 @onready var model_request = $ModelRequest
 @onready var license_request = $LicenseRequest
+@onready var library = preload("res://Default.res")
+@onready var locomotion = preload("res://Locomotion-Library.res")
+const gltf_document_extension_class = preload("res://addons/vrm/vrm_extension.gd")
+const SAVE_DEBUG_GLTFSTATE_RES: bool = false
+@export var ModelLight: bool = true
 
 const API_ENDPOINT = "https://hub.vroid.com//api/download_licenses/"
 
@@ -17,6 +22,11 @@ func _ready():
 		modelload()
 	else:
 		print("Load Error!")
+	
+	if ModelLight:
+		$DirectionalLight3D.visible = true
+	else:
+		$DirectionalLight3D.visible = false
 	
 
 func modelload():
@@ -49,18 +59,39 @@ func _on_model_request_request_completed(result, response_code, headers, body):
 		print("Failed to download file. Response Code:", str(response_code))
 		
 func load_model():
-	var vrm_path = ProjectSettings.globalize_path("user://") + "model.vrm"
-	var gltf = GLTFDocument.new()
-	var gltf_state = GLTFState.new()
-	
-	gltf.append_from_file(vrm_path, gltf_state)
-	
-	
-	var node = gltf.generate_scene(gltf_state)
-	node.name = "Model"
-	add_child(node)
-	
-	if Config.character_spec == "1.0":
-		node.rotation.y = 135
+	var flags = 0
+	var path = ProjectSettings.globalize_path("user://") + "model.vrm"
+	var gltf: GLTFDocument = GLTFDocument.new()
+	flags |= EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS
+	var vrm_extension: GLTFDocumentExtension = gltf_document_extension_class.new()
+	gltf.register_gltf_document_extension(vrm_extension, true)
+	var state: GLTFState = GLTFState.new()
+	# HANDLE_BINARY_EMBED_AS_BASISU crashes on some files in 4.0 and 4.1
+	state.handle_binary_image = GLTFState.HANDLE_BINARY_EMBED_AS_UNCOMPRESSED  # GLTFState.HANDLE_BINARY_EXTRACT_TEXTURES
+	var err = gltf.append_from_file(path, state, flags)
+	if err != OK:
+		gltf.unregister_gltf_document_extension(vrm_extension)
+		return null
+	var generated_scene = gltf.generate_scene(state)
+	if SAVE_DEBUG_GLTFSTATE_RES and path != "":
+		if !ResourceLoader.exists(path + ".res"):
+			state.take_over_path(path + ".res")
+			ResourceSaver.save(state, path + ".res")
+	gltf.unregister_gltf_document_extension(vrm_extension)
+	generated_scene.name = "Model"
+	add_child(generated_scene)
 
 	
+
+
+func _on_walk_pressed():
+	$Model/AnimationPlayer.play("Locomotion-Library/walk")
+
+func _on_run_pressed():
+	$Model/AnimationPlayer.play("Locomotion-Library/run")
+
+func _on_kick_pressed():
+	$Model/AnimationPlayer.play("Locomotion-Library/kick1")
+
+func _on_default_pressed():
+	$Model/AnimationPlayer.play("Default/Pose")
