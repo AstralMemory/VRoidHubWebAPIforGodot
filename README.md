@@ -10,12 +10,13 @@
   https://youtu.be/u7l-A3Ub1rQ
 
 注意点
-使用する前にAssetLibからgodot-vrmをダウンロードしてください。上記の使用したプラグインというやつです。
-モデルをロードした後になぜかモデルが暗くなるためDirectionalLight3Dを設置しています。オンオフは親ノードであるModelLoaderのインスペクター中の Model Lightを切り替えてください。
+使用する前にAssetLibからgodot-vrmをダウンロードしてください。上記の使用したプラグインというやつです。<br>
+モデルをロードした後になぜかモデルが暗くなるためDirectionalLight3Dを設置しています。<br>
+オンオフは親ノードであるModelLoaderのインスペクター中の Model Lightを切り替えてください。
 
-Change Log v1
-addonsフォルダーを削除しました。
-ボーンの関係上VRM1.0は非対応にしました。
+Change Log v1<br>
+addonsフォルダーを削除しました。<br>
+ボーンの関係上VRM1.0は非対応にしました。<br>
 アニメーションテスト用のボタンを追加しました。
 
 
