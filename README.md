@@ -6,8 +6,8 @@
  使用したプラグイン 
   VRM Importer for 3D Avatars and MToon Shader : https://godotengine.org/asset-library/asset/2031
 
-  動作
-  https://youtu.be/u7l-A3Ub1rQ
+  動作 : https://youtu.be/hUyXJTTNMeY
+  
 
 注意点
 使用する前にAssetLibからgodot-vrmをダウンロードしてください。上記の使用したプラグインというやつです。<br>
